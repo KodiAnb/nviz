@@ -32,6 +32,8 @@
 	let preloaded: boolean = false;
 	let opt_one: any; 
 	let opt_two: any; 
+	let opt_one: any; 
+	let opt_two: any; 
 
 	const popupHoverRegression: PopupSettings = {
 		event: 'hover',
@@ -70,6 +72,8 @@
 			prev: []
 		}
 	]
+
+	
 
 	
 	function clear_baskets() {
@@ -118,11 +122,50 @@
 				for (let i: number = 1; i < headers.length; i++) {
 					baskets[0].data.push(headers[i])
 
+
 				}
+				console.log($features)
 				console.log($features)
 			}
 		})
 	}
+
+	
+	
+	function extract_values() {
+		console.log("Option One:", opt_one);
+		console.log("Option Two:", opt_two);
+		
+
+		// Collect unique columns
+		let cols = [];
+		if (!cols.includes(opt_one)) {
+			cols.push(opt_one);
+		}
+		if (!cols.includes(opt_two)) {
+			cols.push(opt_two);
+		}
+
+		// Iterate through selected columns
+		for (let header of cols) {
+			//Update names
+			feature_names.update((arr) => {
+			if (cols[0] === header) {
+				arr = []; // Reset array for the first column
+			}
+			arr.push(header);
+			return arr; // Return updated array
+			});
+        }
+
+  // Helper function to get column values
+  function get_vals(head) {
+    return (row) => row[head];
+  }
+}
+
+			
+	
 
 	
 	
@@ -175,12 +218,15 @@
 
 				let headers: Array<string> = Object.keys(data.data[0]);
 	
+	
 				clear_baskets();
 				baskets[1].data.push(headers[0]);
 				
 				for (let i: number = 1; i < headers.length; i++) {
 					baskets[0].data.push(headers[i])
 				}
+				
+				
 				
 				
 			}
@@ -215,6 +261,7 @@
         hoverBasket = null;
     }
 	
+	
 
 	function drop(event: DragEvent, basketIdx: number) {
         event.preventDefault();
@@ -231,6 +278,9 @@
 				baskets[2].data.unshift(data.item);
 				baskets[2].prev?.unshift(data.basket);
 				toastStore.trigger(t);
+
+			} 
+			else {
 
 			} 
 			else {
@@ -322,6 +372,7 @@
 			<label for="activation">Activation</label>
 			<select bind:value={activation} name="activation" class="select">
 			
+			
 				<option value="relu">ReLU</option>
 				<option value="leaky-relu">Leaky ReLU</option>
 				<option value="sigmoid">Sigmoid</option>
@@ -332,6 +383,27 @@
 			</RangeSlider>
 		</form>
 	</Step>
+	<Step>
+		<svelte:fragment slot="header">Select Markers</svelte:fragment>
+		<form action="" class="bg-surface-200-700-token p-4 rounded-lg">
+			<select bind:value={opt_one} on:change={() => extract_values() } class="select">
+				{#each baskets[0].data as header, i (header)}
+					<option value={header} >{header}</option>
+			    {/each}
+			</select>
+		</form>
+		<form action="" class="bg-surface-200-700-token p-4 rounded-lg">
+			<select bind:value={opt_two} on:change={() => extract_values() } class="select">
+				{#each baskets[0].data as header, i (header)}
+					{#if header != opt_one}
+						<option value={header}>{header}</option>
+					{/if}
+			    {/each}
+			</select>
+		</form>
+	</Step>
+	
+	
 	<Step>
 		<svelte:fragment slot="header">Select Markers</svelte:fragment>
 		<form action="" class="bg-surface-200-700-token p-4 rounded-lg">

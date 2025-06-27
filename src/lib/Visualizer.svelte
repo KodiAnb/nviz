@@ -4,8 +4,10 @@
     import Sankey from "$lib/Sankey.svelte";
 	import Dashboard from "$lib/Dashboard.svelte";
     import Heatmap from "$lib/Heatmap.svelte";
+    import Heatmap from "$lib/Heatmap.svelte";
     import Tester from "$lib/Tester.svelte";
     import { ProgressRadial } from '@skeletonlabs/skeleton';
+    import { hidden_nodes } from './Writable.js';
     import { hidden_nodes } from './Writable.js';
 
     export let num_hidden: number = 0;
@@ -14,6 +16,7 @@
     export let targets: Array<string>;
     export let model_type: string = 'regression';
     export let tab: number = 0;
+     
      
 
     let train_epochs = 1;
@@ -30,6 +33,11 @@
             activation: activation, // supported activation types: ['sigmoid', 'relu', 'leaky-relu', 'tanh'],
             iterations: train_epochs,
         };
+    hidden_nodes.update(() => {
+		return num_hidden; // Return the updated array			
+    });  
+
+    
     hidden_nodes.update(() => {
 		return num_hidden; // Return the updated array			
     });  
@@ -59,10 +67,12 @@
         net = new brain.NeuralNetwork(config);
         handleClick();
         console.log(net)
+        console.log(net)
     })
 </script>
 
 <div class="w-full h-screen flex md:flex-row flex-col gap-4">
+    <div class="flex flex-none md:flex-col flex-row justify-around bg-surface-50-900-token border-primary-200-700-token"> 
     <div class="flex flex-none md:flex-col flex-row justify-around bg-surface-50-900-token border-primary-200-700-token"> 
         <ul class="flex md:flex-col flex-row">
             <li>
@@ -101,11 +111,14 @@
                 <Tester {net} {df} {targets}></Tester>
             {:else if tab===3}
                 <Heatmap {net}{df} ></Heatmap>
+            {:else if tab===3}
+                <Heatmap {net}{df} ></Heatmap>
             {/if}
         {/if}
     </div>
     <div class="flex-none flex justify-center md:flex-col flex-row h-full gap-2">
         <div class="bg-surface-200-700-token shadow rounded-lg p-4 h-fit md:block hidden">
+            <p>Epoc: {elapsed_epochs}</p>
             <p>Epoc: {elapsed_epochs}</p>
             <p>Error: {elapsed_error.toFixed(4)}</p>
         </div>
