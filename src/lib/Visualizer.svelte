@@ -3,8 +3,10 @@
     import type { DataFrame } from '$lib/DataFrame';
     import Sankey from "$lib/Sankey.svelte";
 	import Dashboard from "$lib/Dashboard.svelte";
+    import Heatmap from "$lib/Heatmap.svelte";
     import Tester from "$lib/Tester.svelte";
     import { ProgressRadial } from '@skeletonlabs/skeleton';
+    import { hidden_nodes } from './Writable.js';
 
     export let num_hidden: number = 0;
     export let activation: string = 'sigmoid';
@@ -12,6 +14,7 @@
     export let targets: Array<string>;
     export let model_type: string = 'regression';
     export let tab: number = 0;
+     
 
     let train_epochs = 1;
     let net: any;
@@ -27,6 +30,11 @@
             activation: activation, // supported activation types: ['sigmoid', 'relu', 'leaky-relu', 'tanh'],
             iterations: train_epochs,
         };
+    hidden_nodes.update(() => {
+		return num_hidden; // Return the updated array			
+    });  
+
+    
 
     async function train() {
         let stats = net.train(train_data);
@@ -50,11 +58,12 @@
         train_data = df.target(targets);
         net = new brain.NeuralNetwork(config);
         handleClick();
+        console.log(net)
     })
 </script>
 
 <div class="w-full h-screen flex md:flex-row flex-col gap-4">
-    <div class="flex flex-none md:flex-col flex-row justify-around bg-surface-50-900-token border-primary-200-700-token">
+    <div class="flex flex-none md:flex-col flex-row justify-around bg-surface-50-900-token border-primary-200-700-token"> 
         <ul class="flex md:flex-col flex-row">
             <li>
                 <button on:click={() => {tab = 0}} class:bg-primary-300-600-token={tab === 0} class:hover:bg-surface-100-800-token={tab !==0 } class="flex m-2 justify-center flex-col items-center shadow rounded-full p-3 hover:bg-surface-100-800-token">
@@ -74,6 +83,12 @@
                     <!-- <p>Test</p> -->
                 </button>
             </li>
+            <li>
+                <button on:click={() => {tab = 3}} class:bg-primary-300-600-token={tab === 3} class:hover:bg-surface-100-800-token={tab !==3 } class="flex m-2 justify-center flex-col items-center shadow rounded-full p-3 hover:bg-surface-100-800-token">
+                    <svg class="dark:fill-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M1.5 14H15v-1H2V0H1v13.5l.5.5zM3 11.5v-8l.5-.5h2l.5.5v8l-.5.5h-2l-.5-.5zm2-.5V4H4v7h1zm6-9.5v10l.5.5h2l.5-.5v-10l-.5-.5h-2l-.5.5zm2 .5v9h-1V2h1zm-6 9.5v-6l.5-.5h2l.5.5v6l-.5.5h-2l-.5-.5zm2-.5V6H8v5h1z"/></svg>
+                    <!-- <p>Test</p> -->
+                </button>
+            </li>
         </ul>
     </div>
     <div class:bg-surface-200-700-token={tab !== 2} class="flex-grow rounded-lg">
@@ -84,12 +99,14 @@
                 <Dashboard {error_history} {epoch_history}></Dashboard>
             {:else if tab === 2}
                 <Tester {net} {df} {targets}></Tester>
+            {:else if tab===3}
+                <Heatmap {net}{df} ></Heatmap>
             {/if}
         {/if}
     </div>
     <div class="flex-none flex justify-center md:flex-col flex-row h-full gap-2">
         <div class="bg-surface-200-700-token shadow rounded-lg p-4 h-fit md:block hidden">
-            <p>Epoch: {elapsed_epochs}</p>
+            <p>Epoc: {elapsed_epochs}</p>
             <p>Error: {elapsed_error.toFixed(4)}</p>
         </div>
         <button class="btn variant-filled-primary text-white h-fit md:w-fit w-full" on:click={handleClick}>

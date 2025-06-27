@@ -44,6 +44,8 @@
 	"dependencies": {
 		"@skeletonlabs/tw-plugin": "^0.2.2",
 		"dotenv": "^16.3.1",
-		"papaparse": "^5.4.1"
+		"papaparse": "^5.4.1",
+		"@tensorflow/tfjs": "^4.0.0",
+  		"mathjs": "^11.11.1"
 	}
 }
