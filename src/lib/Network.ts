@@ -83,7 +83,7 @@ export class Network {
                 for (let link of node.links) {
                     let target = link.id;
                     let value = Math.abs(link.value);
-                    let color = link.value >= 0 ? "rgba(76,187,23, 0.5)" : "rgba(237,41,57, 0.5)";
+                    let color = link.value >= 0 ? "rgba(23, 50, 187, 0.5)" : "rgba(237,41,57, 0.5)";
 
                     res.source.push(source);
                     res.target.push(target);

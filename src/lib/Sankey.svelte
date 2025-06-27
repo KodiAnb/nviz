@@ -3,7 +3,7 @@
     import { Network } from "$lib/Network";
 
     export let net: any;
-
+    console.log(net)
     $: updatePlot(net)
 
     var data = [{}];
@@ -33,10 +33,12 @@
             plotData = n.get_plot_info();
 
             data[0].node.label = plotData.label;
+            
             data[0].link.source = plotData.source;
             data[0].link.target = plotData.target;
             data[0].link.value = plotData.value;
             data[0].link.color = plotData.color;
+            console.log(data[0])
 
             Plotly.redraw('sankey')
         }
@@ -44,11 +46,9 @@
 
 
     onMount(() => {
-        console.log(net);
         n = new Network(net);
         n.set_links();
         plotData = n.get_plot_info();
-        // console.log(nodes);
 
         data[0] = {
             type: "sankey",

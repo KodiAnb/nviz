@@ -5,7 +5,6 @@ export class DataFrame {
         this.filters = {};
         this.types = {};
         this.summary = {};
-
         this.determine_types();
         this.fix_types();
         this.summarize();
@@ -119,18 +118,19 @@ export class DataFrame {
     }
 
     filter(key) {
+        console.log(this.data)
         let categories = {}
         let filter_list = []
 
         for (let row of this.data) {
             if (!(row[key] in categories)) {
+                console.log(categories)
                 categories[row[key]] = Object.keys(categories).length;
-                console.log(row[key])
                 filter_list.push(row[key])
             }
             row[key] = categories[row[key]];
         }
-        
+        console.log(this.filters)
         this.filters[key] = filter_list;
     }
 
@@ -194,7 +194,6 @@ export class DataFrame {
 
     normalize(df=this) {
         let res = df.copy();
-
         for (let row of res.data) {
             for (let header in row) {
                 // x - min / (max - min)
