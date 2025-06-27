@@ -4,10 +4,8 @@
     import Sankey from "$lib/Sankey.svelte";
 	import Dashboard from "$lib/Dashboard.svelte";
     import Heatmap from "$lib/Heatmap.svelte";
-    import Heatmap from "$lib/Heatmap.svelte";
     import Tester from "$lib/Tester.svelte";
     import { ProgressRadial } from '@skeletonlabs/skeleton';
-    import { hidden_nodes } from './Writable.js';
     import { hidden_nodes } from './Writable.js';
 
     export let num_hidden: number = 0;
@@ -38,10 +36,6 @@
     });  
 
     
-    hidden_nodes.update(() => {
-		return num_hidden; // Return the updated array			
-    });  
-
     
 
     async function train() {
@@ -72,7 +66,6 @@
 </script>
 
 <div class="w-full h-screen flex md:flex-row flex-col gap-4">
-    <div class="flex flex-none md:flex-col flex-row justify-around bg-surface-50-900-token border-primary-200-700-token"> 
     <div class="flex flex-none md:flex-col flex-row justify-around bg-surface-50-900-token border-primary-200-700-token"> 
         <ul class="flex md:flex-col flex-row">
             <li>
@@ -118,8 +111,7 @@
     </div>
     <div class="flex-none flex justify-center md:flex-col flex-row h-full gap-2">
         <div class="bg-surface-200-700-token shadow rounded-lg p-4 h-fit md:block hidden">
-            <p>Epoc: {elapsed_epochs}</p>
-            <p>Epoc: {elapsed_epochs}</p>
+            <p>Epoch: {elapsed_epochs}</p>
             <p>Error: {elapsed_error.toFixed(4)}</p>
         </div>
         <button class="btn variant-filled-primary text-white h-fit md:w-fit w-full" on:click={handleClick}>

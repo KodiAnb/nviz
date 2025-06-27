@@ -32,8 +32,6 @@
 	let preloaded: boolean = false;
 	let opt_one: any; 
 	let opt_two: any; 
-	let opt_one: any; 
-	let opt_two: any; 
 
 	const popupHoverRegression: PopupSettings = {
 		event: 'hover',
@@ -132,41 +130,8 @@
 
 	
 	
-	function extract_values() {
-		console.log("Option One:", opt_one);
-		console.log("Option Two:", opt_two);
-		
-
-		// Collect unique columns
-		let cols = [];
-		if (!cols.includes(opt_one)) {
-			cols.push(opt_one);
-		}
-		if (!cols.includes(opt_two)) {
-			cols.push(opt_two);
-		}
-
-		// Iterate through selected columns
-		for (let header of cols) {
-			//Update names
-			feature_names.update((arr) => {
-			if (cols[0] === header) {
-				arr = []; // Reset array for the first column
-			}
-			arr.push(header);
-			return arr; // Return updated array
-			});
-        }
-
-  // Helper function to get column values
-  function get_vals(head) {
-    return (row) => row[head];
-  }
-}
 
 			
-	
-
 	
 	
 	function extract_values() {
@@ -278,9 +243,6 @@
 				baskets[2].data.unshift(data.item);
 				baskets[2].prev?.unshift(data.basket);
 				toastStore.trigger(t);
-
-			} 
-			else {
 
 			} 
 			else {
@@ -404,25 +366,6 @@
 	</Step>
 	
 	
-	<Step>
-		<svelte:fragment slot="header">Select Markers</svelte:fragment>
-		<form action="" class="bg-surface-200-700-token p-4 rounded-lg">
-			<select bind:value={opt_one} on:change={() => extract_values() } class="select">
-				{#each baskets[0].data as header, i (header)}
-					<option value={header} >{header}</option>
-			    {/each}
-			</select>
-		</form>
-		<form action="" class="bg-surface-200-700-token p-4 rounded-lg">
-			<select bind:value={opt_two} on:change={() => extract_values() } class="select">
-				{#each baskets[0].data as header, i (header)}
-					{#if header != opt_one}
-						<option value={header}>{header}</option>
-					{/if}
-			    {/each}
-			</select>
-		</form>
-	</Step>
 	
 	
 </Stepper>
