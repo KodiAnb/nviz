@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, tick } from "svelte";
-    import { DataFrame } from '$lib/DataFrame';
+    import {DataFrame} from '$lib/DataFrame';
     import { ProgressRadial } from '@skeletonlabs/skeleton';
 
     export let net: any;
@@ -11,9 +11,12 @@
     let test_results: Object = {};
     let running_test = false;
 
+ 
+
     for (let header of df.headers) {
         if (df.types[header] === 0) {
             test[header] = (df.summary[header].max - df.summary[header].min) / 2.0;
+            console.log(test[header])
         } else {
             test[header] = 0
         }
@@ -23,27 +26,35 @@
 
     function test_model() {
         running_test = true;
+        
         let test_df = new DataFrame(df.headers, [test]);
+        console.log(test_df )
         test_df = df.normalize(test_df);
+        console.log(test_df)
 
         for (let header in test_df.headers) {
             test_df.pop(header);
         }
 
         let res = net.run(test_df.data[0])
-
+       const json = net.toJSON();
         let test_results_df = new DataFrame(targets, [res]);
+        console.log(test_results_df)
         test_results_df = df.denormalize(test_results_df)
+        
 
         for (let header of targets) {
             if (df.types[header] === 0 ) {
                 test_results[header] = test_results_df.data[0][header];
             } else {
                 const val = Math.round(test_results_df.data[0][header]);
+                
                 test_results[header] = df.filters[header][val];
+                console.log(df)
             }
         }
         running_test = false
+        
     }
 
     function randomize_all() {

@@ -4,6 +4,7 @@
     import { flip } from 'svelte/animate';
 	import { tick } from 'svelte';
 	import {feature_names, features,outputs } from './Writable.js';
+	import { DataFrame } from './DataFrame.js';
 
 	$: change_output(baskets[1].data)
 
@@ -71,6 +72,8 @@
 	]
 
 	
+
+	
 	function clear_baskets() {
 		baskets.forEach(basket => {
 			basket.data = []
@@ -117,12 +120,18 @@
 				for (let i: number = 1; i < headers.length; i++) {
 					baskets[0].data.push(headers[i])
 
+
 				}
+				console.log($features)
 				console.log($features)
 			}
 		})
 	}
 
+	
+	
+
+			
 	
 	
 	function extract_values() {
@@ -171,9 +180,9 @@
 				preloaded = true;
 				data = results;
 
-				console.log(data);
 
 				let headers: Array<string> = Object.keys(data.data[0]);
+	
 	
 				clear_baskets();
 				baskets[1].data.push(headers[0]);
@@ -181,6 +190,8 @@
 				for (let i: number = 1; i < headers.length; i++) {
 					baskets[0].data.push(headers[i])
 				}
+				
+				
 				
 				
 			}
@@ -214,6 +225,7 @@
 		// Reset basket
         hoverBasket = null;
     }
+	
 	
 
 	function drop(event: DragEvent, basketIdx: number) {
@@ -322,6 +334,7 @@
 			<label for="activation">Activation</label>
 			<select bind:value={activation} name="activation" class="select">
 			
+			
 				<option value="relu">ReLU</option>
 				<option value="leaky-relu">Leaky ReLU</option>
 				<option value="sigmoid">Sigmoid</option>
@@ -351,6 +364,8 @@
 			</select>
 		</form>
 	</Step>
+	
+	
 	
 	
 </Stepper>
